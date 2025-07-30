@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Images can be read by anyone
+    match /images/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null
+                  && request.resource.size < 5 * 1024 * 1024
+                  && request.resource.contentType.matches('image/.*');
+    }
+    
+    // User avatars
+    match /avatars/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null 
+                  && request.auth.uid == userId
+                  && request.resource.size < 2 * 1024 * 1024
+                  && request.resource.contentType.matches('image/.*');
+    }
+    
+    // Product images (restrict to authenticated users, ideally admins)
+    match /products/{productId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null
+                  && request.resource.size < 10 * 1024 * 1024
+                  && request.resource.contentType.matches('image/.*');
+    }
+  }
+} 

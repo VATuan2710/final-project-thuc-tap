@@ -1,0 +1,16 @@
+{
+  "name": "E-Shop",
+  "short_name": "E-Shop",
+  "description": "Cửa hàng trực tuyến E-Shop",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#1890ff",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+} 
