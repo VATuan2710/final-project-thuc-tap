@@ -1,33 +1,43 @@
 # E-Shop - React TypeScript E-commerce Platform
 
-Một nền tảng thương mại điện tử hoàn chỉnh được xây dựng với React, TypeScript, Firebase và Tailwind CSS.
+Một nền tảng thương mại điện tử hoàn chỉnh được xây dựng với React, TypeScript, Firebase và Ant Design.
 
 ## 🚀 Tính năng
 
-### ✅ Required Features
+### ✅ Core Features
 - **Authentication Module**: Đăng nhập/đăng ký với email và mật khẩu
+- **Social Authentication**: Đăng nhập Google, Facebook
 - **Router Module**: React Router DOM với protected routes
 - **State Management**: Zustand cho quản lý trạng thái toàn cục
-- **Form Management**: React Hook Form với validation (Zod)
-- **Side Effects**: React Query cho data fetching và caching
+- **Form Management**: Ant Design Form với validation
+- **Data Fetching**: TanStack Query cho data fetching và caching
 
 ### 🌟 Advanced Features
-- **Social Authentication**: Đăng nhập Google, Facebook
-- **React Query**: Data caching và synchronization
-- **Tailwind CSS**: Styling hiện đại và responsive
+- **Smart Cart System**: 
+  - Guest cart (tạm thời) khi chưa đăng nhập
+  - User cart (vĩnh viễn) lưu trong Firebase khi đã đăng nhập
+  - Tự động sync cart khi đăng nhập/đăng xuất
+- **Product Management**: 
+  - Hiển thị danh sách sản phẩm với filtering
+  - Trang chi tiết sản phẩm
+  - Thêm vào giỏ hàng
+- **Cart & Checkout**: 
+  - Quản lý giỏ hàng với số lượng
+  - Trang checkout
+- **Responsive Design**: Giao diện responsive với Ant Design
 - **SEO Optimization**: Meta tags, structured data
-- **Firebase Hosting**: Deployment tự động
+- **Firebase Integration**: Auth, Firestore, Storage, Hosting
 
 ## 🛠 Tech Stack
 
 - **Frontend**: React 19, TypeScript, Vite
-- **Styling**: Tailwind CSS, Headless UI
+- **UI Framework**: Ant Design
 - **State Management**: Zustand với persistence
-- **Forms**: React Hook Form + Zod validation
+- **Forms**: Ant Design Form
 - **Data Fetching**: TanStack Query (React Query)
 - **Backend**: Firebase (Auth, Firestore, Storage, Hosting)
-- **Icons**: Heroicons, Lucide React
-- **Notifications**: React Hot Toast
+- **Icons**: Ant Design Icons
+- **Notifications**: Ant Design message/notification
 - **SEO**: React Helmet Async
 
 ## 📋 Yêu cầu hệ thống
@@ -40,15 +50,15 @@ Một nền tảng thương mại điện tử hoàn chỉnh được xây dựn
 ## 🚀 Cài đặt và chạy
 
 ### 1. Clone repository
-\`\`\`bash
+```bash
 git clone <repository-url>
 cd final-project
-\`\`\`
+```
 
 ### 2. Cài đặt dependencies
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 ### 3. Cấu hình Firebase
 
@@ -75,9 +85,9 @@ npm install
 
 ### 4. Cấu hình environment variables
 
-Tạo file \`.env.local\` trong thư mục root:
+Tạo file `.env.local` trong thư mục root:
 
-\`\`\`env
+```env
 VITE_FIREBASE_API_KEY=your_api_key_here
 VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 VITE_FIREBASE_PROJECT_ID=your_project_id
@@ -85,80 +95,87 @@ VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
-\`\`\`
+```
 
 ### 5. Chạy development server
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
-Ứng dụng sẽ chạy tại \`http://localhost:5173\`
+Ứng dụng sẽ chạy tại `http://localhost:5173`
 
 ## 🏗 Cấu trúc dự án
 
-\`\`\`
+```
 src/
 ├── components/          # Shared components
 │   ├── Navbar.tsx
 │   ├── ProtectedRoute.tsx
-│   └── SEO.tsx
+│   ├── SEO.tsx
+│   └── CartStatus.tsx
 ├── pages/              # Page components
 │   ├── HomePage.tsx
 │   ├── LoginPage.tsx
-│   └── RegisterPage.tsx
+│   ├── RegisterPage.tsx
+│   ├── ProductsPage.tsx
+│   ├── ProductDetailPage.tsx
+│   ├── CartPage.tsx
+│   └── CheckoutPage.tsx
 ├── hooks/              # Custom hooks
 │   ├── useAuth.ts
-│   └── useProducts.ts
+│   ├── useProducts.ts
+│   └── useCartSync.ts
 ├── services/           # API services
 │   ├── firebase.ts
 │   ├── authService.ts
-│   └── productService.ts
+│   ├── productService.ts
+│   └── cartService.ts
 ├── store/              # Zustand stores
 │   ├── authStore.ts
 │   └── cartStore.ts
 ├── types/              # TypeScript types
 │   └── index.ts
 └── utils/              # Utility functions
-\`\`\`
+```
 
 ## 🚀 Deployment
 
 ### Build cho production
-\`\`\`bash
+```bash
 npm run build
-\`\`\`
+```
 
 ### Deploy lên Firebase Hosting
 
 1. Cài đặt Firebase CLI:
-\`\`\`bash
+```bash
 npm install -g firebase-tools
-\`\`\`
+```
 
 2. Đăng nhập Firebase:
-\`\`\`bash
+```bash
 firebase login
-\`\`\`
+```
 
 3. Khởi tạo Firebase:
-\`\`\`bash
+```bash
 firebase init
-\`\`\`
+```
 - Chọn Hosting, Firestore, Storage
 - Chọn existing project
-- Public directory: \`dist\`
+- Public directory: `dist`
 - Configure as SPA: Yes
 
 4. Deploy:
-\`\`\`bash
+```bash
 firebase deploy
-\`\`\`
+```
 
 ### Deploy Security Rules
-\`\`\`bash
+```bash
 firebase deploy --only firestore:rules
 firebase deploy --only storage
-\`\`\`
+```
 
 ## 📊 Features Implementation
 
@@ -169,29 +186,36 @@ firebase deploy --only storage
 - [x] Protected routes
 - [x] Persistent login state
 
+### Smart Cart System
+- [x] Guest cart (tạm thời) khi chưa đăng nhập
+- [x] User cart (vĩnh viễn) lưu trong Firebase
+- [x] Tự động sync cart khi đăng nhập/đăng xuất
+- [x] Cart persistence trong Firebase collection `carts`
+- [x] Merge logic thông minh (không merge nếu user đã có cart)
+
+### Product Management
+- [x] Hiển thị danh sách sản phẩm
+- [x] Trang chi tiết sản phẩm
+- [x] Thêm vào giỏ hàng
+- [x] Product filtering và search
+
+### Cart & Checkout
+- [x] Quản lý giỏ hàng với số lượng
+- [x] Thêm/xóa/cập nhật sản phẩm
+- [x] Tính tổng tiền
+- [x] Trang checkout
+
 ### State Management
 - [x] Zustand stores
-- [x] Cart persistence
+- [x] Cart persistence trong Firebase
 - [x] User state management
-
-### Forms & Validation
-- [x] React Hook Form
-- [x] Zod schema validation
-- [x] Dynamic form fields
-- [x] Error handling
-
-### Data Management
-- [x] React Query setup
-- [x] Firebase Firestore integration
-- [x] Optimistic updates
-- [x] Error boundaries
+- [x] Real-time cart sync
 
 ### UI/UX
-- [x] Responsive design
-- [x] Tailwind CSS
+- [x] Responsive design với Ant Design
 - [x] Loading states
 - [x] Toast notifications
-- [x] Dark mode ready
+- [x] Modern UI components
 
 ### SEO
 - [x] Meta tags
@@ -201,37 +225,38 @@ firebase deploy --only storage
 
 ## 🔧 Scripts
 
-\`\`\`bash
+```bash
 npm run dev          # Chạy development server
 npm run build        # Build cho production  
 npm run preview      # Preview production build
 npm run lint         # Chạy ESLint
-\`\`\`
+```
 
 ## 📝 TODO
 
-- [ ] Trang sản phẩm với filtering/sorting
-- [ ] Trang chi tiết sản phẩm
-- [ ] Giỏ hàng và checkout
-- [ ] Quản lý đơn hàng
 - [ ] Admin panel
-- [ ] Payment integration
+- [ ] Payment integration (Stripe/PayPal)
 - [ ] Email notifications
+- [ ] Order management
+- [ ] User profile management
+- [ ] Product reviews và ratings
+- [ ] Wishlist functionality
+- [ ] Advanced search và filtering
+- [ ] Inventory management
 
 ## 🤝 Contributing
 
 1. Fork project
-2. Tạo feature branch (\`git checkout -b feature/AmazingFeature\`)
-3. Commit changes (\`git commit -m 'Add some AmazingFeature'\`)
-4. Push to branch (\`git push origin feature/AmazingFeature\`)
+2. Tạo feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Tạo Pull Request
 
 ## 📄 License
 
-Distributed under the MIT License. See \`LICENSE\` for more information.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📞 Contact
 
-Your Name - your.email@example.com
+Your Name - vatbgct@gmail.com
 
-Project Link: [https://github.com/yourusername/final-project](https://github.com/yourusername/final-project)

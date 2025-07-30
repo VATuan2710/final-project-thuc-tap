@@ -52,7 +52,6 @@ export const ProductDetailPage: React.FC = () => {
     if (!product) return;
     
     addItem(product, quantity);
-    message.success(`Đã thêm ${quantity} sản phẩm vào giỏ hàng!`);
   };
 
   const handleBuyNow = () => {

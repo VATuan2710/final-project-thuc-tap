@@ -26,7 +26,8 @@ import {
   AppstoreOutlined,
   BarsOutlined 
 } from '@ant-design/icons';
-import { useProducts, useCategories } from '../hooks/useProducts';
+import { useCategories } from '../hooks/useProducts';
+import { useSimpleProducts } from '../hooks/useSimpleProducts';
 import { useCartStore } from '../store/cartStore';
 import { SEO } from '../components/SEO';
 import type { ProductFilterForm } from '../types';
@@ -47,17 +48,17 @@ export const ProductsPage: React.FC = () => {
     category: searchParams.get('category') || '',
     minPrice: undefined,
     maxPrice: undefined,
-    sortBy: (searchParams.get('sort') as SortOption) || 'newest'
+    sortBy: (searchParams.get('sort') as any) || 'newest'
   });
 
   const addItem = useCartStore((state) => state.addItem);
   const { data: categoriesData } = useCategories();
-  const { data: productsData, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useProducts(filters, 12);
+  const { data: products, isLoading, error } = useSimpleProducts();
 
-  // Flatten products from all pages
+  // Use products directly
   const allProducts = useMemo(() => {
-    return productsData?.pages.flatMap(page => page.products || []).filter(product => product && product.id) || [];
-  }, [productsData]);
+    return products || [];
+  }, [products]);
 
   const handleFilterChange = (key: keyof ProductFilterForm, value: any) => {
     const newFilters = { ...filters, [key]: value };
@@ -223,7 +224,7 @@ export const ProductsPage: React.FC = () => {
                       <Text delete type="secondary" style={{ fontSize: '12px' }}>
                         {formatPrice(product.originalPrice)}
                       </Text>
-                      <Tag color="red" size="small" style={{ marginLeft: '4px' }}>
+                      <Tag color="red" style={{ marginLeft: '4px' }}>
                         -{product.discount}%
                       </Tag>
                     </div>
@@ -401,8 +402,8 @@ export const ProductsPage: React.FC = () => {
                     />
                   </div>
 
-                  {/* Load More Button */}
-                  {hasNextPage && (
+                  {/* Load More Button - Removed since we're using simple products */}
+                  {/* {hasNextPage && (
                     <div style={{ textAlign: 'center', marginTop: '24px' }}>
                       <Button 
                         type="dashed" 
@@ -413,7 +414,7 @@ export const ProductsPage: React.FC = () => {
                         Tải thêm sản phẩm
                       </Button>
                     </div>
-                  )}
+                  )} */}
                 </>
               )}
             </Col>

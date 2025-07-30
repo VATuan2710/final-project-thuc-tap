@@ -16,7 +16,6 @@ export const HomePage: React.FC = () => {
 
   const handleAddToCart = (product: any) => {
     addItem(product);
-    message.success(`${product.name} đã được thêm vào giỏ hàng!`);
   };
 
   return (

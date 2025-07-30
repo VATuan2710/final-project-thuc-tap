@@ -65,17 +65,14 @@ export const CartPage: React.FC = () => {
       return;
     }
     updateQuantity(productId, quantity);
-    message.success('Đã cập nhật số lượng');
   };
 
   const handleRemoveItem = (productId: string) => {
     removeItem(productId);
-    message.success('Đã xóa sản phẩm khỏi giỏ hàng');
   };
 
   const handleClearCart = () => {
     clearCart();
-    message.success('Đã xóa toàn bộ giỏ hàng');
   };
 
   const handleCheckout = () => {
