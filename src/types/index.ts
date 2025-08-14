@@ -151,4 +151,13 @@ export interface CheckoutForm {
   cardNumber?: string;
   expiryDate?: string;
   cvv?: string;
+}
+
+// Wishlist types
+export interface WishlistItem {
+  id: string;
+  userId: string;
+  productId: string;
+  product: Product;
+  addedAt: Date;
 } 

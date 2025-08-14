@@ -27,7 +27,7 @@ import {
 import { useWishlist, useRemoveFromWishlist, useClearWishlist } from '../hooks/useWishlist';
 import { useCartStore } from '../store/cartStore';
 import { SEO } from '../components/SEO';
-import type { WishlistItem } from '../services/wishlistService';
+import type { WishlistItem } from '../types';
 
 const { Title, Text, Paragraph } = Typography;
 
