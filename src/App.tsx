@@ -18,6 +18,7 @@ import { CheckoutPage } from './pages/CheckoutPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { OrdersPage } from './pages/OrdersPage';
 import { CheckoutSuccessPage } from './pages/CheckoutSuccessPage';
+import { WishlistPage } from './pages/WishlistPage';
 
 const { Content, Footer } = Layout;
 const { Text } = Typography;
@@ -54,6 +55,12 @@ function App() {
                 <Route path="/orders" element={
                   <ProtectedRoute>
                     <OrdersPage />
+                  </ProtectedRoute>
+                } />
+                
+                <Route path="/wishlist" element={
+                  <ProtectedRoute>
+                    <WishlistPage />
                   </ProtectedRoute>
                 } />
                 

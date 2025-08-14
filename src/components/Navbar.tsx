@@ -20,6 +20,7 @@ import {
   UserAddOutlined,
   ProfileOutlined,
   ShoppingOutlined,
+  HeartOutlined,
 } from "@ant-design/icons";
 import { useAuth, useLogout } from "../hooks/useAuth";
 import { useCartSync } from "../hooks/useCartSync";
@@ -66,6 +67,11 @@ export const Navbar: React.FC = () => {
       label: <Link to="/profile">Tài khoản</Link>,
     },
     {
+      key: "wishlist",
+      icon: <HeartOutlined />,
+      label: <Link to="/wishlist">Yêu thích</Link>,
+    },
+    {
       key: "orders",
       icon: <ShoppingOutlined />,
       label: <Link to="/orders">Đơn hàng</Link>,
@@ -105,6 +111,11 @@ export const Navbar: React.FC = () => {
         key: "profile",
         icon: <ProfileOutlined />,
         label: <Link to="/profile">Tài khoản</Link>,
+      },
+      {
+        key: "wishlist",
+        icon: <HeartOutlined />,
+        label: <Link to="/wishlist">Yêu thích</Link>,
       },
       {
         key: "orders",

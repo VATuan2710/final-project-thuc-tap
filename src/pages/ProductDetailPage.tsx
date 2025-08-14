@@ -33,6 +33,8 @@ import {
 } from '@ant-design/icons';
 import { useProduct, useFeaturedProducts } from '../hooks/useProducts';
 import { useCartStore } from '../store/cartStore';
+import { useIsInWishlist, useToggleWishlist } from '../hooks/useWishlist';
+import { useAuth } from '../hooks/useAuth';
 import { SEO } from '../components/SEO';
 
 const { Title, Text, Paragraph } = Typography;
@@ -45,6 +47,11 @@ export const ProductDetailPage: React.FC = () => {
   const { data: product, isLoading, error } = useProduct(id!);
   const { data: relatedProducts } = useFeaturedProducts(4);
   const addItem = useCartStore((state) => state.addItem);
+  
+  // Wishlist functionality
+  const { isAuthenticated } = useAuth();
+  const { data: isInWishlist = false } = useIsInWishlist(id!);
+  const toggleWishlist = useToggleWishlist();
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -56,6 +63,20 @@ export const ProductDetailPage: React.FC = () => {
     handleAddToCart();
     // Navigate to cart or checkout
     window.location.href = '/cart';
+  };
+
+  const handleToggleWishlist = () => {
+    if (!isAuthenticated) {
+      window.location.href = '/login';
+      return;
+    }
+    
+    if (!product) return;
+    
+    toggleWishlist.mutate({
+      product,
+      isInWishlist,
+    });
   };
 
   const formatPrice = (price: number) => {
@@ -291,11 +312,17 @@ export const ProductDetailPage: React.FC = () => {
                     <Row gutter={12}>
                       <Col span={12}>
                         <Button
-                          type="text"
-                          icon={<HeartOutlined />}
-                          style={{ width: '100%' }}
+                          type={isInWishlist ? "primary" : "text"}
+                          icon={<HeartOutlined style={{ color: isInWishlist ? '#fff' : '#ff4d4f' }} />}
+                          style={{ 
+                            width: '100%',
+                            borderColor: isInWishlist ? '#ff4d4f' : 'transparent',
+                            backgroundColor: isInWishlist ? '#ff4d4f' : 'transparent'
+                          }}
+                          loading={toggleWishlist.isPending}
+                          onClick={handleToggleWishlist}
                         >
-                          Yêu thích
+                          {isInWishlist ? 'Đã yêu thích' : 'Yêu thích'}
                         </Button>
                       </Col>
                       <Col span={12}>
