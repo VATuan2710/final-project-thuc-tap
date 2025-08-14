@@ -25,7 +25,6 @@ import {
   ShoppingCartOutlined, 
   HeartOutlined,
   ShareAltOutlined,
-  StarOutlined,
   ShopOutlined,
   SafetyCertificateOutlined,
   TruckOutlined,
@@ -35,7 +34,6 @@ import {
 import { useProduct, useFeaturedProducts } from '../hooks/useProducts';
 import { useCartStore } from '../store/cartStore';
 import { SEO } from '../components/SEO';
-import { message } from 'antd';
 
 const { Title, Text, Paragraph } = Typography;
 

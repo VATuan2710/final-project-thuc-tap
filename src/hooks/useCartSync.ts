@@ -5,7 +5,7 @@ import * as cartService from '../services/cartService';
 
 export const useCartSync = () => {
   const { user, isAuthenticated } = useAuthStore();
-  const { syncWithUser, mergeGuestCart, setCartFromDatabase } = useCartStore();
+  const { /*syncWithUser,*/ mergeGuestCart, setCartFromDatabase } = useCartStore();
 
   useEffect(() => {
     const handleAuthChange = async () => {
@@ -26,14 +26,16 @@ export const useCartSync = () => {
           // Fallback: merge guest cart
           await mergeGuestCart();
         }
-      } else if (!isAuthenticated) {
-        // Khi user đăng xuất, chỉ clear local state, không xóa Firebase
-        syncWithUser();
-      }
+      } 
+    //   else if (!isAuthenticated) {
+    //     // Khi user đăng xuất, chỉ clear local state, không xóa Firebase
+    //     syncWithUser();
+    //     console.log('user đăng xuất');
+    //   }
     };
 
     handleAuthChange();
-  }, [isAuthenticated, user, mergeGuestCart, syncWithUser, setCartFromDatabase]);
+  }, [isAuthenticated, user, mergeGuestCart, /*syncWithUser,*/ setCartFromDatabase]);
 
   return {
     isGuestCart: useCartStore(state => state.isGuestCart),

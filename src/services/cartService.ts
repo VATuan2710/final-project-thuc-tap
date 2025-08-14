@@ -81,7 +81,6 @@ export const mergeGuestCartWithUserCart = async (
     
     // Merge guest cart với user cart
     const mergedItems = [...userCart.items];
-    const existingProductIds = new Set(userCart.items.map(item => item.productId));
     
     guestItems.forEach(guestItem => {
       const existingItemIndex = mergedItems.findIndex(item => item.productId === guestItem.productId);

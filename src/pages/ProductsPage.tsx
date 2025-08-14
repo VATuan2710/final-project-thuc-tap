@@ -16,11 +16,8 @@ import {
   Tag,
   Image,
   Slider,
-  Collapse,
-  Checkbox
 } from 'antd';
 import { 
-  SearchOutlined, 
   ShoppingCartOutlined, 
   FilterOutlined,
   AppstoreOutlined,
@@ -34,10 +31,9 @@ import type { ProductFilterForm } from '../types';
 
 const { Title, Text, Paragraph } = Typography;
 const { Option } = Select;
-const { Panel } = Collapse;
 
 type ViewMode = 'grid' | 'list';
-type SortOption = 'newest' | 'price-asc' | 'price-desc' | 'rating' | 'name';
+// type SortOption = 'newest' | 'price' | 'rating' | 'popular' | 'name';
 
 export const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -53,12 +49,60 @@ export const ProductsPage: React.FC = () => {
 
   const addItem = useCartStore((state) => state.addItem);
   const { data: categoriesData } = useCategories();
-  const { data: products, isLoading, error } = useSimpleProducts();
+  const { data: products, isLoading } = useSimpleProducts();
 
-  // Use products directly
+  // Apply filters to products
   const allProducts = useMemo(() => {
-    return products || [];
-  }, [products]);
+    if (!products) return [];
+    
+    let filteredProducts = [...products];
+    
+    // Search filter
+    if (filters.search) {
+      const searchTerm = filters.search.toLowerCase();
+      filteredProducts = filteredProducts.filter(product =>
+        product.name.toLowerCase().includes(searchTerm) ||
+        product.description.toLowerCase().includes(searchTerm)
+      );
+    }
+    
+    // Category filter
+    if (filters.category && filters.category !== '') {
+      filteredProducts = filteredProducts.filter(product =>
+        product.category === filters.category
+      );
+    }
+    
+    // Price range filter
+    if (filters.minPrice || filters.maxPrice) {
+      filteredProducts = filteredProducts.filter(product => {
+        const price = product.price;
+        const minPrice = filters.minPrice || 0;
+        const maxPrice = filters.maxPrice || 200000000;
+        return price >= minPrice && price <= maxPrice;
+      });
+    }
+    
+    // Sort products
+    if (filters.sortBy) {
+      filteredProducts.sort((a, b) => {
+        switch (filters.sortBy) {
+          case 'newest':
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          case 'price':
+            return filters.sortOrder === 'desc' ? b.price - a.price : a.price - b.price;
+          case 'rating':
+            return b.rating - a.rating;
+          case 'popular':
+            return b.reviewCount - a.reviewCount;
+          default:
+            return 0;
+        }
+      });
+    }
+    
+    return filteredProducts;
+  }, [products, filters]);
 
   const handleFilterChange = (key: keyof ProductFilterForm, value: any) => {
     const newFilters = { ...filters, [key]: value };
@@ -67,7 +111,7 @@ export const ProductsPage: React.FC = () => {
 
     // Update URL params
     const params = new URLSearchParams(searchParams);
-    if (value) {
+    if (value && value !== '') {
       params.set(key, value.toString());
     } else {
       params.delete(key);
@@ -272,8 +316,8 @@ export const ProductsPage: React.FC = () => {
                       value={filters.category}
                       onChange={(value) => handleFilterChange('category', value)}
                       style={{ width: '100%', marginTop: '8px' }}
-                      allowClear
                     >
+                      <Option value="">Tất cả</Option>
                       {categoriesData && categoriesData.length > 0 && categoriesData.map(category => (
                         <Option key={category.id} value={category.id}>
                           {category.name}
@@ -288,9 +332,9 @@ export const ProductsPage: React.FC = () => {
                     <Slider
                       range
                       min={0}
-                      max={50000000}
+                      max={200000000}
                       step={100000}
-                      value={[filters.minPrice || 0, filters.maxPrice || 50000000]}
+                      value={[filters.minPrice || 0, filters.maxPrice || 200000000]}
                       onChange={([min, max]) => {
                         handleFilterChange('minPrice', min);
                         handleFilterChange('maxPrice', max);
@@ -302,7 +346,7 @@ export const ProductsPage: React.FC = () => {
                     />
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
                       <Text type="secondary">{formatPrice(filters.minPrice || 0)}</Text>
-                      <Text type="secondary">{formatPrice(filters.maxPrice || 50000000)}</Text>
+                      <Text type="secondary">{formatPrice(filters.maxPrice || 200000000)}</Text>
                     </div>
                   </div>
 
@@ -315,11 +359,20 @@ export const ProductsPage: React.FC = () => {
                       style={{ width: '100%', marginTop: '8px' }}
                     >
                       <Option value="newest">Mới nhất</Option>
-                      <Option value="price-asc">Giá thấp đến cao</Option>
-                      <Option value="price-desc">Giá cao đến thấp</Option>
+                      <Option value="price">Giá</Option>
                       <Option value="rating">Đánh giá cao nhất</Option>
-                      <Option value="name">Tên A-Z</Option>
+                      <Option value="popular">Phổ biến nhất</Option>
                     </Select>
+                    {filters.sortBy === 'price' && (
+                      <Select
+                        value={filters.sortOrder}
+                        onChange={(value) => handleFilterChange('sortOrder', value)}
+                        style={{ width: '100%', marginTop: '8px' }}
+                      >
+                        <Option value="asc">Thấp đến cao</Option>
+                        <Option value="desc">Cao đến thấp</Option>
+                      </Select>
+                    )}
                   </div>
                 </Space>
               </Card>

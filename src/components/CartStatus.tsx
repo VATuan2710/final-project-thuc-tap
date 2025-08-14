@@ -5,7 +5,7 @@ import { useCartSync } from '../hooks/useCartSync';
 import { useAuth } from '../hooks/useAuth';
 
 export const CartStatus: React.FC = () => {
-  const { isGuestCart, itemCount } = useCartSync();
+  const { itemCount } = useCartSync();
   const { isAuthenticated } = useAuth();
 
   if (isAuthenticated) {

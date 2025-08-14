@@ -154,7 +154,7 @@ export const useCartStore = create<CartState>()(
           // Khi user đăng nhập, sync cart với database
           get().mergeGuestCart();
         } else {
-          // Khi logout, chỉ chuyển về guest cart (không xóa cart trong Firebase)
+          // Khi logout, chỉ chuyển về guest cart (
           set({ items: [], total: 0, isGuestCart: true });
         }
       },
@@ -168,15 +168,7 @@ export const useCartStore = create<CartState>()(
       }
     }),
     {
-      name: 'cart-storage',
-      partialize: (state) => {
-        // Không lưu cart vào localStorage, chỉ lưu vào Firebase
-        return {
-          items: [],
-          total: 0,
-          isGuestCart: true,
-        };
-      },
+      name: 'cart-storage'
     }
   )
 ); 

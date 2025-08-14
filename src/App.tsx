@@ -15,6 +15,7 @@ import { ProductsPage } from './pages/ProductsPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
+import { ProfilePage } from './pages/ProfilePage';
 
 const { Content, Footer } = Layout;
 const { Text } = Typography;
@@ -44,10 +45,7 @@ function App() {
                 {/* Protected Routes */}
                 <Route path="/profile" element={
                   <ProtectedRoute>
-                    <div style={{ padding: '48px', textAlign: 'center' }}>
-                      <h1>Trang cá nhân</h1>
-                      <p>Đang phát triển...</p>
-                    </div>
+                    <ProfilePage />
                   </ProtectedRoute>
                 } />
                 
@@ -114,8 +112,6 @@ function App() {
                 </div>
               </div>
             </Footer>
-            
-
           </Layout>
         </Router>
       </HelmetProvider>

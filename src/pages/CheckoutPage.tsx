@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Row, 
   Col, 
@@ -24,14 +24,40 @@ import {
   CheckCircleOutlined
 } from '@ant-design/icons';
 import { useCartStore } from '../store/cartStore';
+import { useAuth } from '../hooks/useAuth';
 import { SEO } from '../components/SEO';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 export const CheckoutPage: React.FC = () => {
+  const navigate = useNavigate();
   const { items, total, getItemCount } = useCartStore();
+  const { isAuthenticated } = useAuth();
   const itemCount = getItemCount();
+
+  // Kiểm tra authentication khi vào trang checkout
+  useEffect(() => {
+    if (!isAuthenticated) {
+      // Lưu URL hiện tại để redirect lại sau khi login
+      sessionStorage.setItem('redirectAfterLogin', '/checkout');
+      navigate('/login?message=checkout');
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Nếu chưa đăng nhập, hiển thị loading
+  if (!isAuthenticated) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '50vh' 
+      }}>
+        <div>Đang chuyển hướng đến trang đăng nhập...</div>
+      </div>
+    );
+  }
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', {

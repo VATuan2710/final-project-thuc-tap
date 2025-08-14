@@ -5,7 +5,6 @@ import { ShoppingCartOutlined } from '@ant-design/icons';
 import { useFeaturedProducts, useCategories } from '../hooks/useProducts';
 import { useCartStore } from '../store/cartStore';
 import { SEO } from '../components/SEO';
-import { message } from 'antd';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -111,6 +110,7 @@ export const HomePage: React.FC = () => {
                     <Card
                       hoverable
                       cover={
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 250 }}>
                         <Link to={`/products/${product.id}`}>
                           <Image
                             alt={product.name}
@@ -119,6 +119,7 @@ export const HomePage: React.FC = () => {
                             style={{ objectFit: 'cover' }}
                           />
                         </Link>
+                      </div>
                       }
                       actions={[
                         <Button

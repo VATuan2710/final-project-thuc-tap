@@ -4,6 +4,7 @@ import * as authService from '../services/authService';
 import type { LoginForm, RegisterForm } from '../types';
 import { message } from 'antd';
 import { useEffect } from 'react';
+import { useCartStore } from '../store/cartStore';
 
 // Auth state hook
 export const useAuth = () => {
@@ -107,6 +108,7 @@ export const useLogout = () => {
     mutationFn: authService.signOut,
     onSuccess: () => {
       logout();
+      useCartStore.getState().clearCart();
       queryClient.clear();
       message.success('Đã đăng xuất thành công!');
     },

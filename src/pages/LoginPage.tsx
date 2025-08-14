@@ -14,11 +14,18 @@ export const LoginPage: React.FC = () => {
   const googleLogin = useGoogleLogin();
   const facebookLogin = useFacebookLogin();
 
-  const from = location.state?.from?.pathname || '/';
+  // Kiểm tra URL params và sessionStorage để redirect
+  const searchParams = new URLSearchParams(location.search);
+  const message = searchParams.get('message');
+  const redirectAfterLogin = sessionStorage.getItem('redirectAfterLogin') || '/';
+
+  const from = location.state?.from?.pathname || redirectAfterLogin;
 
   const onFinish = async (values: LoginForm) => {
     try {
       await login.mutateAsync(values);
+      // Xóa redirect URL sau khi login thành công
+      sessionStorage.removeItem('redirectAfterLogin');
       navigate(from, { replace: true });
     } catch (error) {
       // Error is handled by the mutation
@@ -28,6 +35,8 @@ export const LoginPage: React.FC = () => {
   const handleGoogleLogin = async () => {
     try {
       await googleLogin.mutateAsync();
+      // Xóa redirect URL sau khi login thành công
+      sessionStorage.removeItem('redirectAfterLogin');
       navigate(from, { replace: true });
     } catch (error) {
       // Error is handled by the mutation
@@ -37,6 +46,8 @@ export const LoginPage: React.FC = () => {
   const handleFacebookLogin = async () => {
     try {
       await facebookLogin.mutateAsync();
+      // Xóa redirect URL sau khi login thành công
+      sessionStorage.removeItem('redirectAfterLogin');
       navigate(from, { replace: true });
     } catch (error) {
       // Error is handled by the mutation
@@ -48,6 +59,13 @@ export const LoginPage: React.FC = () => {
       <Card style={{ width: '100%', maxWidth: '400px' }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <Title level={2}>Đăng nhập vào tài khoản</Title>
+          {message === 'checkout' && (
+            <div style={{ marginBottom: '16px' }}>
+              <Text type="warning" strong>
+                Vui lòng đăng nhập để tiếp tục thanh toán
+              </Text>
+            </div>
+          )}
           <Text type="secondary">
             Hoặc{' '}
             <Link to="/register" style={{ color: '#1890ff' }}>

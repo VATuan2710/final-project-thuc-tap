@@ -16,7 +16,6 @@ import {
   Popconfirm,
   message,
   Badge,
-  Statistic,
   Alert
 } from 'antd';
 import { 
@@ -41,6 +40,8 @@ const { Title, Text, Paragraph } = Typography;
 
 export const CartPage: React.FC = () => {
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = React.useState(false);
+  
   const { 
     items, 
     total, 
@@ -51,6 +52,18 @@ export const CartPage: React.FC = () => {
   } = useCartStore();
 
   const itemCount = getItemCount();
+
+  // Check screen size
+  React.useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -397,22 +410,26 @@ export const CartPage: React.FC = () => {
                 }
               >
                 {/* Desktop Table View */}
-                <div className="md:block hidden">
-                  <Table
-                    dataSource={items}
-                    columns={columns}
-                    rowKey="id"
-                    pagination={false}
-                    scroll={{ x: 800 }}
-                  />
-                </div>
+                {!isMobile && (
+                  <div>
+                    <Table
+                      dataSource={items}
+                      columns={columns}
+                      rowKey="id"
+                      pagination={false}
+                      scroll={{ x: 800 }}
+                    />
+                  </div>
+                )}
 
                 {/* Mobile Card View */}
-                <div className="md:hidden block">
-                  {items.map(item => (
-                    <MobileCartItem key={item.id} item={item} />
-                  ))}
-                </div>
+                {isMobile && (
+                  <div>
+                    {items.map(item => (
+                      <MobileCartItem key={item.id} item={item} />
+                    ))}
+                  </div>
+                )}
               </Card>
             </Col>
 
@@ -483,7 +500,7 @@ export const CartPage: React.FC = () => {
 
                   {/* Promotion Alert */}
                   <Alert
-                    message="🎉 Khuyến mãi đặc biệt"
+                    message="Khuyến mãi đặc biệt"
                     description="Mua thêm 500.000đ để được giảm 10% tổng đơn hàng"
                     type="info"
                     showIcon

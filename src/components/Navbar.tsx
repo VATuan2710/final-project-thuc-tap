@@ -22,7 +22,6 @@ import {
   ShoppingOutlined,
 } from "@ant-design/icons";
 import { useAuth, useLogout } from "../hooks/useAuth";
-import { useCartStore } from "../store/cartStore";
 import { useCartSync } from "../hooks/useCartSync";
 
 const { Header } = Layout;
@@ -37,7 +36,7 @@ export const Navbar: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   // Sync cart with user authentication
-  const { isGuestCart, itemCount } = useCartSync();
+  const { itemCount } = useCartSync();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -72,7 +71,7 @@ export const Navbar: React.FC = () => {
       label: <Link to="/orders">Đơn hàng</Link>,
     },
     {
-      type: "divider",
+      type: "divider" as const,
     },
     {
       key: "logout",
@@ -82,7 +81,7 @@ export const Navbar: React.FC = () => {
     },
   ];
 
-  const mobileMenuItems = [
+  const mobileMenuItems: any[] = [
     {
       key: "products",
       icon: <ShoppingOutlined />,
@@ -112,12 +111,12 @@ export const Navbar: React.FC = () => {
         icon: <ShoppingOutlined />,
         label: <Link to="/orders">Đơn hàng</Link>,
       },
-      {
-        key: "logout",
-        icon: <LogoutOutlined />,
-        label: "Đăng xuất",
-        onClick: handleLogout,
-      }
+              {
+          key: "logout",
+          icon: <LogoutOutlined />,
+          label: "Đăng xuất",
+          onClick: handleLogout,
+        }
     );
   } else {
     mobileMenuItems.push(
