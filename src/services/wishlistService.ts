@@ -16,19 +16,14 @@ import type { Product, WishlistItem } from '../types';
 // Add product to wishlist
 export async function addToWishlist(userId: string, product: Product): Promise<void> {
   try {
-    console.log('Adding to wishlist:', { userId, productId: product.id });
     const wishlistRef = doc(db, 'wishlists', `${userId}_${product.id}`);
     
-    const wishlistData = {
+    await setDoc(wishlistRef, {
       userId,
       productId: product.id,
       product,
       addedAt: serverTimestamp(),
-    };
-    
-    console.log('Wishlist data:', wishlistData);
-    await setDoc(wishlistRef, wishlistData);
-    console.log('Successfully added to wishlist');
+    });
   } catch (error) {
     console.error('Error adding to wishlist:', error);
     throw new Error('Không thể thêm vào danh sách yêu thích');
@@ -49,7 +44,6 @@ export async function removeFromWishlist(userId: string, productId: string): Pro
 // Get user's wishlist
 export async function getUserWishlist(userId: string): Promise<WishlistItem[]> {
   try {
-    console.log('Getting wishlist for user:', userId);
     const q = query(
       collection(db, 'wishlists'),
       where('userId', '==', userId),
@@ -61,7 +55,6 @@ export async function getUserWishlist(userId: string): Promise<WishlistItem[]> {
     
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      console.log('Wishlist item data:', doc.id, data);
       wishlistItems.push({
         id: doc.id,
         ...data,
@@ -69,7 +62,6 @@ export async function getUserWishlist(userId: string): Promise<WishlistItem[]> {
       } as WishlistItem);
     });
     
-    console.log('Total wishlist items:', wishlistItems.length);
     return wishlistItems;
   } catch (error) {
     console.error('Error getting wishlist:', error);
