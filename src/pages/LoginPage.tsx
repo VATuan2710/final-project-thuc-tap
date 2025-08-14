@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Form, Input, Button, Card, Typography, Space, Divider, Checkbox } from 'antd';
-import { UserOutlined, LockOutlined, GoogleOutlined, FacebookOutlined } from '@ant-design/icons';
-import { useLogin, useGoogleLogin, useFacebookLogin } from '../hooks/useAuth';
+import { Form, Input, Button, Card, Typography, Divider, Checkbox } from 'antd';
+import { UserOutlined, LockOutlined, GoogleOutlined } from '@ant-design/icons';
+import { useLogin, useGoogleLogin } from '../hooks/useAuth';
 import type { LoginForm } from '../types';
 
 const { Title, Text } = Typography;
@@ -12,7 +12,6 @@ export const LoginPage: React.FC = () => {
   const location = useLocation();
   const login = useLogin();
   const googleLogin = useGoogleLogin();
-  const facebookLogin = useFacebookLogin();
 
   // Kiểm tra URL params và sessionStorage để redirect
   const searchParams = new URLSearchParams(location.search);
@@ -43,16 +42,7 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const handleFacebookLogin = async () => {
-    try {
-      await facebookLogin.mutateAsync();
-      // Xóa redirect URL sau khi login thành công
-      sessionStorage.removeItem('redirectAfterLogin');
-      navigate(from, { replace: true });
-    } catch (error) {
-      // Error is handled by the mutation
-    }
-  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f5f5f5', padding: '48px 16px' }}>
@@ -135,29 +125,16 @@ export const LoginPage: React.FC = () => {
 
           <Divider>Hoặc</Divider>
 
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Button
-              type="default"
-              icon={<GoogleOutlined />}
-              onClick={handleGoogleLogin}
-              loading={googleLogin.isPending}
-              size="large"
-              style={{ width: '100%' }}
-            >
-              Đăng nhập với Google
-            </Button>
-
-            <Button
-              type="default"
-              icon={<FacebookOutlined />}
-              onClick={handleFacebookLogin}
-              loading={facebookLogin.isPending}
-              size="large"
-              style={{ width: '100%' }}
-            >
-              Đăng nhập với Facebook
-            </Button>
-          </Space>
+          <Button
+            type="default"
+            icon={<GoogleOutlined />}
+            onClick={handleGoogleLogin}
+            loading={googleLogin.isPending}
+            size="large"
+            style={{ width: '100%' }}
+          >
+            Đăng nhập với Google
+          </Button>
         </Form>
       </Card>
     </div>

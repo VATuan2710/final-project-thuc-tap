@@ -9,7 +9,7 @@ import {
   type AuthError
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { auth, db, googleProvider, facebookProvider } from './firebase';
+import { auth, db, googleProvider } from './firebase';
 import type { User, LoginForm, RegisterForm } from '../types';
 
 // Convert Firebase user to our User type
@@ -24,7 +24,7 @@ async function convertFirebaseUser(firebaseUser: FirebaseUser): Promise<User | n
     id: firebaseUser.uid,
     email: firebaseUser.email || '',
     displayName: firebaseUser.displayName || '',
-    photoURL: firebaseUser.photoURL || undefined,
+    photoURL: firebaseUser.photoURL || userData?.photoURL || undefined,
     phoneNumber: firebaseUser.phoneNumber || undefined,
     address: userData?.address,
     createdAt: userData?.createdAt?.toDate() || new Date(),
@@ -124,17 +124,7 @@ export async function signInWithGoogle(): Promise<User> {
   }
 }
 
-export async function signInWithFacebook(): Promise<User> {
-  try {
-    const result = await signInWithPopup(auth, facebookProvider);
-    await saveUserToFirestore(result.user);
-    const user = await convertFirebaseUser(result.user);
-    if (!user) throw new Error('Failed to convert user data');
-    return user;
-  } catch (error) {
-    throw handleAuthError(error as AuthError);
-  }
-}
+
 
 // Sign out
 export async function signOut(): Promise<void> {

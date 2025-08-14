@@ -81,23 +81,7 @@ export const useGoogleLogin = () => {
   });
 };
 
-// Facebook login mutation
-export const useFacebookLogin = () => {
-  const queryClient = useQueryClient();
-  const { setUser } = useAuthStore();
 
-  return useMutation({
-    mutationFn: authService.signInWithFacebook,
-    onSuccess: (user) => {
-      setUser(user);
-      queryClient.invalidateQueries();
-      message.success(`Chào mừng ${user.displayName || user.email}!`);
-    },
-    onError: (error: Error) => {
-      message.error(error.message);
-    },
-  });
-};
 
 // Logout mutation
 export const useLogout = () => {
