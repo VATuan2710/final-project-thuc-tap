@@ -22,9 +22,8 @@ import {
   LockOutlined,
   EnvironmentOutlined,
 } from '@ant-design/icons';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth, useUpdateProfile, useChangePassword, useUploadAvatar } from '../hooks';
 import { SEO } from '../components/SEO';
-import { useUpdateProfile, useChangePassword, useUploadAvatar } from '../hooks/useProfile';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
