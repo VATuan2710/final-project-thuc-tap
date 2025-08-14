@@ -118,13 +118,8 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
-  const handleAvatarUpload = async (file: File) => {
-    try {
-      await uploadAvatar.mutateAsync(file);
-      message.success('Cập nhật ảnh đại diện thành công!');
-    } catch (error) {
-      message.error('Cập nhật ảnh đại diện thất bại!');
-    }
+  const handleAvatarUpload = (file: File) => {
+    uploadAvatar.mutate(file);
   };
 
   const beforeUpload = (file: File) => {

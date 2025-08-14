@@ -110,6 +110,8 @@ export const useUploadAvatar = () => {
 
   return useMutation({
     mutationFn: async (file: File) => {
+      console.log('Starting avatar upload:', { fileName: file.name, fileSize: file.size, fileType: file.type });
+      
       if (!user || !auth.currentUser) {
         throw new Error('User not authenticated');
       }
@@ -117,9 +119,12 @@ export const useUploadAvatar = () => {
       // Create a unique filename
       const fileName = `avatars/${user.id}/${Date.now()}_${file.name}`;
       const storageRef = ref(storage, fileName);
+      
+      console.log('Upload path:', fileName);
 
       // Upload file
       const snapshot = await uploadBytes(storageRef, file);
+      console.log('Upload completed, getting download URL...');
       
       // Get download URL
       const downloadURL = await getDownloadURL(snapshot.ref);
@@ -145,6 +150,9 @@ export const useUploadAvatar = () => {
       
       setUser(updatedUser);
       return downloadURL;
+    },
+    onSuccess: () => {
+      message.success('Cập nhật ảnh đại diện thành công!');
     },
     onError: (error) => {
       console.error('Error uploading avatar:', error);

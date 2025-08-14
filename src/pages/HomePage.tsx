@@ -5,6 +5,7 @@ import { ShoppingCartOutlined } from '@ant-design/icons';
 import { useFeaturedProducts, useCategories } from '../hooks/useProducts';
 import { useCartStore } from '../store/cartStore';
 import { SEO } from '../components/SEO';
+import { AvatarUploadTest } from '../components/AvatarUploadTest';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -203,6 +204,9 @@ export const HomePage: React.FC = () => {
             </div>
           </div>
         </section>
+
+        {/* Avatar Upload Test - Remove in production */}
+        <AvatarUploadTest />
       </div>
     </>
   );
