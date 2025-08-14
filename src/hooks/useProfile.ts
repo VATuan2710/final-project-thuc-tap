@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+// Profile management hooks for user account operations
 import { updatePassword, updateProfile as updateFirebaseProfile, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';

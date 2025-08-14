@@ -23,8 +23,8 @@ import {
   EnvironmentOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '../hooks/useAuth';
-import { useUpdateProfile, useChangePassword, useUploadAvatar } from '../hooks/useProfile';
 import { SEO } from '../components/SEO';
+import { useUpdateProfile, useChangePassword, useUploadAvatar } from '../hooks/useProfile';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
