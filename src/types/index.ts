@@ -71,6 +71,11 @@ export interface Order {
   shippingAddress: Address;
   paymentMethod: PaymentMethod;
   paymentStatus: PaymentStatus;
+  customerInfo: {
+    fullName: string;
+    phoneNumber: string;
+    email: string;
+  };
   createdAt: Date;
   updatedAt: Date;
 }

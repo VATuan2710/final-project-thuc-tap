@@ -16,6 +16,8 @@ import { ProductDetailPage } from './pages/ProductDetailPage';
 import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { OrdersPage } from './pages/OrdersPage';
+import { CheckoutSuccessPage } from './pages/CheckoutSuccessPage';
 
 const { Content, Footer } = Layout;
 const { Text } = Typography;
@@ -51,10 +53,7 @@ function App() {
                 
                 <Route path="/orders" element={
                   <ProtectedRoute>
-                    <div style={{ padding: '48px', textAlign: 'center' }}>
-                      <h1>Đơn hàng của tôi</h1>
-                      <p>Đang phát triển...</p>
-                    </div>
+                    <OrdersPage />
                   </ProtectedRoute>
                 } />
                 
@@ -64,6 +63,7 @@ function App() {
                 
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
               </Routes>
             </Content>
             
