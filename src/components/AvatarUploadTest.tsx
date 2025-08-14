@@ -1,7 +1,9 @@
 import React from 'react';
 import { Button, Upload, Avatar, message, Card, Space, Typography } from 'antd';
-import { UserOutlined, CameraOutlined } from '@ant-design/icons';
+import { UserOutlined, CameraOutlined, BugOutlined } from '@ant-design/icons';
 import { useAuth, useUploadAvatar } from '../hooks';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../services/firebase';
 
 const { Title, Text } = Typography;
 
@@ -31,6 +33,30 @@ export const AvatarUploadTest: React.FC = () => {
 
     uploadAvatar.mutate(file);
     return false; // Prevent automatic upload
+  };
+
+  const testDirectUpload = async () => {
+    try {
+      message.info('Testing Firebase Storage connection...');
+      
+      // Create a test file
+      const testData = 'test file content';
+      const testFile = new File([testData], 'test.txt', { type: 'text/plain' });
+      
+      const testRef = ref(storage, `test/${user?.id}/test_${Date.now()}.txt`);
+      
+      console.log('Uploading test file to:', testRef.fullPath);
+      const snapshot = await uploadBytes(testRef, testFile);
+      console.log('Test upload successful:', snapshot);
+      
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      console.log('Download URL:', downloadURL);
+      
+      message.success('Firebase Storage test successful!');
+    } catch (error) {
+      console.error('Firebase Storage test failed:', error);
+      message.error('Firebase Storage test failed: ' + (error as Error).message);
+    }
   };
 
   if (!isAuthenticated) {
@@ -67,19 +93,28 @@ export const AvatarUploadTest: React.FC = () => {
           <Text>{uploadAvatar.isPending ? 'Uploading...' : 'Ready'}</Text>
         </div>
         
-        <Upload
-          showUploadList={false}
-          beforeUpload={handleFileSelect}
-          accept="image/*"
-        >
-          <Button
-            type="primary"
-            icon={<CameraOutlined />}
-            loading={uploadAvatar.isPending}
+        <Space>
+          <Upload
+            showUploadList={false}
+            beforeUpload={handleFileSelect}
+            accept="image/*"
           >
-            Test Upload Avatar
+            <Button
+              type="primary"
+              icon={<CameraOutlined />}
+              loading={uploadAvatar.isPending}
+            >
+              Test Upload Avatar
+            </Button>
+          </Upload>
+          
+          <Button
+            icon={<BugOutlined />}
+            onClick={testDirectUpload}
+          >
+            Test Firebase Storage
           </Button>
-        </Upload>
+        </Space>
         
         {uploadAvatar.error && (
           <div>
